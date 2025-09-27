@@ -1,17 +1,24 @@
+
+
+
+
+
+
+
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 /* =========================
-   Accent variables (new scheme)
+   Accent variables (HeroSection-inspired)
    ========================= */
 .auth-page {
-  --accent-1: #6a11cb;   /* vibrant purple */
-  --accent-2: #8e2de2;   /* rich violet */
-  --accent-3: #4a90e2;   /* modern blue */
-  --accent-4: #1c92d2;   /* deep cyan-blue */
-  --accent-shadow: rgba(142, 45, 226, 0.35);
-  --bg-dark: #1d1d26;
-  --text-light: #f5f5f7;
-  --text-dim: #ccccdd;
+  --accent-1: #0077ff;   /* vivid blue */
+  --accent-2: #00aaff;   /* aqua blue */
+  --accent-3: #004080;   /* navy */
+  --accent-4: #e6f2ff;   /* soft cream-blue */
+  --accent-shadow: rgba(0, 102, 204, 0.35);
+  --bg-light: #f5f5f0;   /* cream */
+  --text-dark: #1a1a1a;
+  --text-dim: #555;
 }
 
 /* =========================
@@ -30,8 +37,8 @@
   align-items: center;
   min-height: 100vh;
 
-  /* ✨ Gradient background */
-  background: radial-gradient(circle at top left, #e3f2fd 0%, #e1d4fc 25%, #d5caff 60%, #c0c9ff 100%);
+  /* ✨ HeroSection-like gradient */
+  background: linear-gradient(135deg, #001F3F 0%, #004080 45%, #f5f5f0 100%);
   background-attachment: fixed;
   padding: 20px;
 }
@@ -45,8 +52,8 @@
   box-shadow: 0 0 35px var(--accent-shadow);
   overflow: hidden;
   border-radius: 14px;
-  background: rgba(30, 30, 40, 0.88);
-  backdrop-filter: blur(16px) saturate(140%);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(12px) saturate(140%);
   animation: fadeInContainer 1s ease-in-out;
 }
 
@@ -99,8 +106,8 @@
   font-size: 32px;
   text-align: center;
   margin-bottom: 10px;
-  color: var(--text-light);
-  text-shadow: 0 0 6px rgba(142, 45, 226, 0.4);
+  color: var(--accent-3);
+  text-shadow: 0 0 6px rgba(0, 102, 204, 0.25);
 }
 
 /* ===== Input Box ===== */
@@ -118,21 +125,21 @@
   border: none;
   outline: none;
   font-size: 16px;
-  color: var(--text-light);
+  color: var(--text-dark);
   font-weight: 500;
-  border-bottom: 2px solid #777;
+  border-bottom: 2px solid #aaa;
   padding-right: 23px;
   transition: .5s;
 }
 
 .auth-page .input-box input::placeholder {
-  color: rgba(255,255,255,0.45);
+  color: rgba(0,0,0,0.35);
 }
 
 .auth-page .input-box input:focus,
 .auth-page .input-box input:valid {
   border-bottom-color: var(--accent-2);
-  box-shadow: 0 2px 6px rgba(142,45,226,0.25);
+  box-shadow: 0 2px 6px rgba(0,102,204,0.2);
 }
 
 .auth-page .input-box label {
@@ -141,7 +148,7 @@
   left: 0;
   transform: translateY(-50%);
   font-size: 16px;
-  color: #bbb;
+  color: #777;
   pointer-events: none;
   transition: .5s;
 }
@@ -154,13 +161,13 @@
 
 /* ===== Error/Success Text ===== */
 .auth-page .error-text {
-  color: #ff6b6b;
+  color: #ff4d4d;
   font-size: 14px;
   text-align: center;
   margin-top: 10px;
 }
 .auth-page .success-text {
-  color: #51cf66;
+  color: #28a745;
   font-size: 14px;
   text-align: center;
   margin-top: 10px;
@@ -203,7 +210,7 @@
 }
 
 .auth-page .btn:hover {
-  box-shadow: 0 0 15px rgba(142,45,226,0.6);
+  box-shadow: 0 0 15px rgba(0,102,204,0.45);
 }
 
 /* ===== Register Link ===== */
@@ -217,8 +224,8 @@
   text-decoration: none;
   font-weight: 600;
   cursor: pointer;
-  color: var(--accent-3);
-  text-shadow: 0 0 4px rgba(74,144,226,0.4);
+  color: var(--accent-1);
+  text-shadow: 0 0 4px rgba(0,119,255,0.3);
 }
 
 .auth-page .regi-link a:hover {
@@ -272,8 +279,8 @@
   text-transform: uppercase;
   font-size: 36px;
   line-height: 1.3;
-  color: var(--text-light);
-  text-shadow: 0 0 10px rgba(142,45,226,0.6);
+  color: var(--accent-3);
+  text-shadow: 0 0 10px rgba(0,102,204,0.35);
 }
 
 .auth-page .info-content p {
@@ -293,7 +300,7 @@
   transform-origin: bottom right;
   transition: 1.5s ease;
   z-index: 1;
-  box-shadow: 0 12px 40px rgba(142,45,226,0.25);
+  box-shadow: 0 12px 40px rgba(0,102,204,0.2);
 }
 
 .auth-page .container.active .curved-shape {
@@ -307,7 +314,7 @@
   top: 100%;
   height: 700px;
   width: 850px;
-  background: var(--bg-dark);
+  background: var(--bg-light);
   border-top: 3px solid var(--accent-2);
   transform: rotate(0deg) skewY(0deg);
   transform-origin: bottom left;
@@ -379,7 +386,7 @@
     z-index: 1;
     clip-path: polygon(0 0, 100% 0, 0 100%);
     transition: clip-path 1.2s ease-in-out; 
-    box-shadow: 0 10px 30px rgba(142,45,226,0.25);
+    box-shadow: 0 10px 30px rgba(0,102,204,0.25);
   }
 
   .auth-page .container.active .curved-shape {
