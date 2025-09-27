@@ -331,8 +331,8 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import vi from "../assets/vi.mp4";
-import vi2 from "../assets/vi2.mp4";
+import vi from "../assets/vi4.mp4";
+import vi2 from "../assets/vi3.mp4";
 import b1 from "../assets/b1.jpg";
 import b2 from "../assets/b2.jpg";
 import b3 from "../assets/b3.jpg";
