@@ -86,8 +86,7 @@ app.use(cookieParser());
 
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://shoes-ecommerce-sohams-projects-32d50290.vercel.app",
-  "https://shoes-ecommerce-iota.vercel.app"
+  "https://ecommerce-store-gold-gamma.vercel.app"
 ];
 
 app.use(cors({
