@@ -71,11 +71,16 @@ useEffect(() => {
         <div className="flex justify-center mt-12">
           <Link
             to="/products/subcategory/featured"
-            className="relative inline-flex items-center space-x-2 px-8 py-4 rounded-full overflow-hidden
-                       bg-gradient-to-r from-pink-600 to-purple-600 text-white font-semibold text-lg
-                       shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1
-                       group focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
-          >
+          //   className="relative inline-flex items-center space-x-2 px-8 py-4 rounded-full overflow-hidden
+          //              bg-gradient-to-r from-pink-600 to-purple-600 text-white font-semibold text-lg
+          //              shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1
+          //              group focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
+          // >
+          className="relative inline-flex items-center space-x-2 px-8 py-4 rounded-full overflow-hidden
+           bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold text-lg
+           shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1
+           group focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+
             <span className="relative z-10">View All</span>
             <BsArrowRight className="relative z-10 transform transition-transform duration-300 group-hover:translate-x-1" />
             <span className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300"></span>

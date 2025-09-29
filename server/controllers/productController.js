@@ -162,90 +162,237 @@ const mapOptionalField = (value) => {
 // @desc   Create a new product
 // @route   POST /api/products
 // @access Private/Admin
+// exports.createProduct = async (req, res) => {
+//   const { name, description, brand, category, gender, subCategory, variants } = req.body;
+
+//   if (!category) {
+//     return res.status(400).json({ message: 'Category is required.' });
+//   }
+
+//   try {
+//     const fileUrls = [];
+//     if (req.files && req.files.length > 0) {
+//       for (const file of req.files) {
+//         const result = await bufferUpload(file.buffer, process.env.CLOUDINARY_FOLDER);
+//         fileUrls.push(result.secure_url);
+//       }
+//     }
+
+//     const product = new Product({
+//       name,
+//       description,
+//       brand,
+//       category,
+//       // ✅ FIX: Use helper function to convert '""' or 'null' string to JS null
+//       gender: mapOptionalField(gender),
+//       subCategory: mapOptionalField(subCategory), 
+//       images: fileUrls,
+//       variants: JSON.parse(variants),
+//     });
+
+//     const createdProduct = await product.save();
+//     res.status(201).json({
+//       message: 'Product created successfully',
+//       product: createdProduct,
+//     });
+//   } catch (error) {
+//     console.error('Backend Error during product creation:', error);
+//     if (error.name === 'ValidationError') {
+//         return res.status(400).json({ message: 'Validation failed', errors: error.errors });
+//     }
+//     res.status(500).json({ message: 'Failed to create product', error });
+//   }
+// };
+
 exports.createProduct = async (req, res) => {
-  const { name, description, brand, category, gender, subCategory, variants } = req.body;
+    const { 
+        name, 
+        description, 
+        brand, 
+        category, 
+        gender, 
+        subCategory, 
+        variants, 
+        // 💡 NEW FIELDS
+        discountPercentage, 
+        detailedDescription, 
+        productDetails 
+    } = req.body;
 
-  if (!category) {
-    return res.status(400).json({ message: 'Category is required.' });
-  }
+    if (!category) {
+        return res.status(400).json({ message: 'Category is required.' });
+    }
 
-  try {
-    const fileUrls = [];
-    if (req.files && req.files.length > 0) {
-      for (const file of req.files) {
-        const result = await bufferUpload(file.buffer, process.env.CLOUDINARY_FOLDER);
-        fileUrls.push(result.secure_url);
-      }
-    }
+    try {
+        const fileUrls = [];
+        let sizeChartImageUrl = null;
+        
+        // 🌟 CORRECTED: Access 'images' array directly from req.files object
+        const newImages = req.files && req.files.images ? req.files.images : [];
+        for (const file of newImages) {
+            const result = await bufferUpload(file.buffer, process.env.CLOUDINARY_FOLDER);
+            fileUrls.push(result.secure_url);
+        }
 
-    const product = new Product({
-      name,
-      description,
-      brand,
-      category,
-      // ✅ FIX: Use helper function to convert '""' or 'null' string to JS null
-      gender: mapOptionalField(gender),
-      subCategory: mapOptionalField(subCategory), 
-      images: fileUrls,
-      variants: JSON.parse(variants),
-    });
+        // 🌟 CORRECTED: Access 'sizeChartImage' array directly from req.files object
+        const sizeChartFileArray = req.files && req.files.sizeChartImage ? req.files.sizeChartImage : [];
+        if (sizeChartFileArray.length > 0) {
+             // Only process the first file in the array
+            const result = await bufferUpload(sizeChartFileArray[0].buffer, process.env.CLOUDINARY_FOLDER);
+            sizeChartImageUrl = result.secure_url;
+        }
 
-    const createdProduct = await product.save();
-    res.status(201).json({
-      message: 'Product created successfully',
-      product: createdProduct,
-    });
-  } catch (error) {
-    console.error('Backend Error during product creation:', error);
-    if (error.name === 'ValidationError') {
-        return res.status(400).json({ message: 'Validation failed', errors: error.errors });
-    }
-    res.status(500).json({ message: 'Failed to create product', error });
-  }
+        const product = new Product({
+            name,
+            description,
+            brand,
+            category,
+            gender: mapOptionalField(gender),
+            subCategory: mapOptionalField(subCategory), 
+            images: fileUrls,
+            variants: JSON.parse(variants),
+            
+            // 💡 NEW FIELD ASSIGNMENTS
+            discountPercentage: Number(discountPercentage) || 0,
+            detailedDescription: detailedDescription ? detailedDescription.split(',').map(item => item.trim()) : [], 
+            productDetails: productDetails || '',
+            sizeChartImage: sizeChartImageUrl,
+        });
+
+        const createdProduct = await product.save();
+        res.status(201).json({
+            message: 'Product created successfully',
+            product: createdProduct,
+        });
+    } catch (error) {
+        console.error('Backend Error during product creation:', error);
+        if (error.name === 'ValidationError') {
+            return res.status(400).json({ message: 'Validation failed', errors: error.errors });
+        }
+        res.status(500).json({ message: 'Failed to create product', error });
+    }
 };
 
 // @desc   Update a product
 // @route   PUT /api/products/:id
 // @access Private/Admin
+// exports.updateProduct = async (req, res) => {
+//   const { name, description, brand, category, gender, subCategory, variants } = req.body;
+
+//   try {
+//     const product = await Product.findById(req.params.id);
+//     if (!product) {
+//       return res.status(404).json({ message: 'Product not found' });
+//     }
+
+//     const fileUrls = req.files && req.files.length > 0 ? [] : product.images;
+//     if (req.files && req.files.length > 0) {
+//       for (const file of req.files) {
+//         const result = await bufferUpload(file.buffer, process.env.CLOUDINARY_FOLDER);
+//         fileUrls.push(result.secure_url);
+//       }
+//     }
+
+//     product.name = name !== undefined ? name : product.name;
+//     product.description = description !== undefined ? description : product.description;
+//     product.brand = brand !== undefined ? brand : product.brand;
+//     product.category = category !== undefined ? category : product.category;
+//     
+//     // ✅ FIX: Use helper function for updates as well
+//     if (gender !== undefined) product.gender = mapOptionalField(gender);
+//     if (subCategory !== undefined) product.subCategory = mapOptionalField(subCategory);
+
+//     product.images = fileUrls;
+//     product.variants = variants ? JSON.parse(variants) : product.variants;
+
+//     const updatedProduct = await product.save();
+//     res.json({
+//       message: 'Product updated successfully',
+//       product: updatedProduct,
+//     });
+//   } catch (error) {
+//     console.error('Backend Error during product update:', error);
+//     res.status(500).json({ message: 'Failed to update product', error });
+//   }
+// };
 exports.updateProduct = async (req, res) => {
-  const { name, description, brand, category, gender, subCategory, variants } = req.body;
+    const { 
+        name, 
+        description, 
+        brand, 
+        category, 
+        gender, 
+        subCategory, 
+        variants, 
+        // 💡 NEW FIELDS
+        discountPercentage, 
+        detailedDescription, 
+        productDetails,
+        existingImages, // Array of existing URLs to KEEP
+        existingSizeChartImage // URL of existing size chart image to KEEP (or "null" string)
+    } = req.body;
 
-  try {
-    const product = await Product.findById(req.params.id);
-    if (!product) {
-      return res.status(404).json({ message: 'Product not found' });
-    }
+    try {
+        const product = await Product.findById(req.params.id);
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
 
-    const fileUrls = req.files && req.files.length > 0 ? [] : product.images;
-    if (req.files && req.files.length > 0) {
-      for (const file of req.files) {
-        const result = await bufferUpload(file.buffer, process.env.CLOUDINARY_FOLDER);
-        fileUrls.push(result.secure_url);
-      }
-    }
+        // 1. Handle main images
+        // 🌟 CORRECTED: req.files is an object. Access 'images' property.
+        const newImages = req.files && req.files.images ? req.files.images : []; 
+        let fileUrls = Array.isArray(existingImages) ? existingImages : (existingImages ? [existingImages] : []);
+        
+        for (const file of newImages) {
+            const result = await bufferUpload(file.buffer, process.env.CLOUDINARY_FOLDER);
+            fileUrls.push(result.secure_url);
+        }
 
-    product.name = name !== undefined ? name : product.name;
-    product.description = description !== undefined ? description : product.description;
-    product.brand = brand !== undefined ? brand : product.brand;
-    product.category = category !== undefined ? category : product.category;
-    
-    // ✅ FIX: Use helper function for updates as well
-    if (gender !== undefined) product.gender = mapOptionalField(gender);
-    if (subCategory !== undefined) product.subCategory = mapOptionalField(subCategory);
+        // 2. Handle size chart image
+        let sizeChartImageUrl = mapOptionalField(existingSizeChartImage); // Handles 'null' string or missing data
+        
+        // 🌟 CORRECTED: Access 'sizeChartImage' array property.
+        const newSizeChartFileArray = req.files && req.files.sizeChartImage ? req.files.sizeChartImage : [];
+        
+        if (newSizeChartFileArray.length > 0) {
+            // Only process the first file in the array
+            const result = await bufferUpload(newSizeChartFileArray[0].buffer, process.env.CLOUDINARY_FOLDER);
+            sizeChartImageUrl = result.secure_url;
+        }
 
-    product.images = fileUrls;
-    product.variants = variants ? JSON.parse(variants) : product.variants;
 
-    const updatedProduct = await product.save();
-    res.json({
-      message: 'Product updated successfully',
-      product: updatedProduct,
-    });
-  } catch (error) {
-    console.error('Backend Error during product update:', error);
-    res.status(500).json({ message: 'Failed to update product', error });
-  }
+        // Update all fields
+        product.name = name !== undefined ? name : product.name;
+        product.description = description !== undefined ? description : product.description;
+        product.brand = brand !== undefined ? brand : product.brand;
+        product.category = category !== undefined ? category : product.category;
+        
+        if (gender !== undefined) product.gender = mapOptionalField(gender);
+        if (subCategory !== undefined) product.subCategory = mapOptionalField(subCategory);
+
+        product.images = fileUrls;
+        product.variants = variants ? JSON.parse(variants) : product.variants;
+        
+        // 💡 NEW FIELD UPDATES
+        product.discountPercentage = discountPercentage !== undefined ? Number(discountPercentage) : product.discountPercentage;
+        product.detailedDescription = detailedDescription !== undefined 
+            ? detailedDescription.split(',').map(item => item.trim()) 
+            : product.detailedDescription;
+        product.productDetails = productDetails !== undefined ? productDetails : product.productDetails;
+        product.sizeChartImage = sizeChartImageUrl; // Use the value determined from existing/new logic
+
+        const updatedProduct = await product.save();
+        res.json({
+            message: 'Product updated successfully',
+            product: updatedProduct,
+        });
+    } catch (error) {
+        console.error('Backend Error during product update:', error);
+        res.status(500).json({ message: 'Failed to update product', error });
+    }
 };
+
+
 
 exports.getGenericFeaturedProducts = async (req, res) => {
     try {

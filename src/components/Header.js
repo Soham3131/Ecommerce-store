@@ -425,14 +425,26 @@ const Header = () => {
   const cartCount = cartItems.length;
 
   return (
+    // <header
+    //   className={`sticky top-0 z-50 transition-all duration-300 ${
+    //     isScrolled
+    //       ? "backdrop-blur-lg bg-gradient-to-r from-pink-50/60 via-yellow-50/60 to-blue-50/60 shadow-lg"
+    //       : "bg-gradient-to-r from-pink-50 via-yellow-50 to-blue-50"
+    //   }`}
+    //   role="banner"
+    // >
     <header
-      className={`sticky top-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? "backdrop-blur-lg bg-gradient-to-r from-pink-50/60 via-yellow-50/60 to-blue-50/60 shadow-lg"
-          : "bg-gradient-to-r from-pink-50 via-yellow-50 to-blue-50"
-      }`}
-      role="banner"
-    >
+  className={`sticky top-0 z-50 transition-all duration-300 ${
+    isScrolled
+      ? "backdrop-blur-lg bg-gradient-to-r from-blue-50/80 via-cyan-50/80 to-white/80 shadow-lg"
+      : "bg-gradient-to-r from-blue-50 via-cyan-50 to-white"
+  }`}
+  role="banner"
+  style={{
+    backgroundColor: isScrolled ? "rgba(240, 249, 255, 0.9)" : "#f0f9ff", // fallback solid color
+  }}
+>
+
       <div
         className={`mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between transition-all duration-300 ${
           isScrolled ? "py-2" : "py-4"
